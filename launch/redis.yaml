@@ -4,6 +4,7 @@ metadata:
   name: redis
   labels:
     app: redis
+    course: DSC104_FA20_A00
 spec:
   activeDeadlineSeconds: 14400
   affinity:
@@ -18,7 +19,7 @@ spec:
             - 'false'
   containers:
   - name: redis-master
-    image: redis:latest
+    image: redis:6.0.8
     command:
       - redis-server
       - "--maxmemory 256mb"
