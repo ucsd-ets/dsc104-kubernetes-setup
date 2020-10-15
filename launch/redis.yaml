@@ -21,26 +21,20 @@ spec:
     image: redis:latest
     command:
       - redis-server
-      - "--maxmemory 2mb"
-      - "--maxmemory-policy allkeys-lru"
+      - "--maxmemory 256mb"
+      - "--maxmemory-policy noeviction"
     env:
     - name: MASTER
       value: "true"
     resources:
       requests:
-        cpu: 100m
-        memory: 2Gi
+        cpu: 200m
+        memory: 256Mi
       limits:
-        cpu: 100m
-        memory: 2Gi
+        cpu: 500m
+        memory: 1Gi
     ports:
     - containerPort: 6379
-    volumeMounts:
-    - mountPath: /redis-master-data
-      name: data
-  volumes:
-    - name: data
-      emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
