@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb-pod
+  labels:
+    app: mongodb
+    course: DSC104_FA20_A00
+spec:
+  activeDeadlineSeconds: 14400
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: admitcpupods
+            operator: In
+            values:
+            - 'true'
+            - 'false'
+  containers:
+  - name: mongodb
+    image: mongo:4.4.1-bionic
+    env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: admin
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        value: password
+    resources:
+      requests:
+        cpu: 200m
+        memory: 2Gi
+      limits:
+        cpu: 500m
+        memory: 2Gi
+    ports:
+    - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-mongo
+  labels:
+    app: mongodb
+spec:
+  clusterIP: None
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    app: mongodb
