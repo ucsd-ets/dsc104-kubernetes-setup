@@ -29,6 +29,16 @@ spec:
         app: cassandra
     spec:
       terminationGracePeriodSeconds: 1800
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: admitcpupods
+                operator: In
+                values:
+                - 'true'
+                - 'false'
       containers:
       - name: cassandra
         image: gcr.io/google-samples/cassandra:v13
@@ -43,10 +53,10 @@ spec:
         - containerPort: 9042
           name: cql
         resources:
-          limits:
+          requests:
             cpu: "200m"
             memory: 1Gi
-          requests:
+          limits:
             cpu: "500m"
             memory: 2Gi
         securityContext:

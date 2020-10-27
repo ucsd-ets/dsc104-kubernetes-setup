@@ -22,7 +22,7 @@ spec:
     image: redis:6.0.8
     command:
       - redis-server
-      - "--maxmemory 256mb"
+      - "--maxmemory 1024mb"
       - "--maxmemory-policy noeviction"
     env:
     - name: MASTER
