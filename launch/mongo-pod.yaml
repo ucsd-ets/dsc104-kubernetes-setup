@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: redis
+  name: mongodb-pod
   labels:
-    app: redis
+    app: mongodb
     course: DSC104_FA20_A00
 spec:
   activeDeadlineSeconds: 14400
@@ -18,35 +18,33 @@ spec:
             - 'true'
             - 'false'
   containers:
-  - name: redis-master
-    image: redis:6.0.8
-    command:
-      - redis-server
-      - "--maxmemory 1024mb"
-      - "--maxmemory-policy noeviction"
+  - name: mongodb
+    image: mongo:4.4.1-bionic
     env:
-    - name: MASTER
-      value: "true"
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: admin
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        value: password
     resources:
       requests:
         cpu: 200m
-        memory: 256Mi
+        memory: 2Gi
       limits:
         cpu: 500m
-        memory: 1Gi
+        memory: 2Gi
     ports:
-    - containerPort: 6379
+    - containerPort: 27017
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-redis
+  name: my-mongo
   labels:
-    app: redis
+    app: mongodb
 spec:
+  clusterIP: None
   ports:
-  - port: 6379
-    targetPort: 6379
-    name: client
+  - port: 27017
+    targetPort: 27017
   selector:
-    app: redis
+    app: mongodb
