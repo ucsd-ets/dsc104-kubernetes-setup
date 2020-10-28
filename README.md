@@ -106,11 +106,17 @@ SSH into dsmlp-login.ucsd.edu
 
 `$ cd ~/dsc104-kubernetes-setup`
 
-`$ kubectl create -f launch/cassandra-statefulset.yaml`
+Create service first
+
+`$ kubectl create -f cassandra-svc.yaml`
+
+Create statefulset of 3 pods
+
+`$ sed "s/{{NAMESPACE}}/$USER/g" launch/cassandra-statefulset.yaml | kubectl create -f - `
 
 `$ kubectl get statefulset`
 
-Wait for the statefulset `READY` state to be `3/3`. It takes around 10 minutes to be ready. Use `kubectl get events` to monitor pod status. Use `kubectl logs cassandra-0 -f` to watch the individual pod logs. Go to datahub.ucsd.edu and spawn a DSC104 notebook.
+Wait for the statefulset `READY` state to be `3/3`. It takes 5-10 minutes to complete. Use `kubectl get events` to monitor pod launch status. Use `kubectl logs cassandra-0 -f` to watch the individual pod logs. Go to datahub.ucsd.edu and spawn a DSC104 notebook.
 
 ```python
 from cassandra.cluster import Cluster
